@@ -1,23 +1,20 @@
-const express=  require('express');
+const express = require('express');
 const router = express.Router();
 
-router.get("/:users", (req, res, next)=>{
+router.get("/:users", (req, res, next) => {
     const hands = {
         ROCK: 0,
         SCISSORS: 1,
         PAPER: 2,
-        묵 : 0,
-        찌 : 1,
-        빠 : 2
+        묵: 0,
+        찌: 1,
+        빠: 2
     };
 
     let users = req.params['users'].toUpperCase();
-    let servers = Object.keys(hands)[Math.floor(Math.random()*10)%3];
+    let servers = Object.keys(hands)[Math.floor(Math.random() * 10) % 3];
 
-    console.log(users)
-    console.log(servers)
-
-    switch(hands[users] - hands[servers]){
+    switch (hands[users] - hands[servers]) {
         case 2:
         case -1:
             res.send(
@@ -39,19 +36,19 @@ router.get("/:users", (req, res, next)=>{
             next();
     }
 
-}, (req, res)=>{
+}, (req, res) => {
     res.send({
-        status : "오류",
+        status: "오류",
         message: "잘못된 승부수입니다."
     });
 });
 
 function makeBody(status, yours, ours, message) {
-    return{
-        status : status,
-        yours : yours,
-        ours : ours,
-        message : message
+    return {
+        status: status,
+        yours: yours,
+        ours: ours,
+        message: message
     }
 }
 
