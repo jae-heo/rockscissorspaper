@@ -3,16 +3,16 @@ const router = express.Router();
 
 router.get("/:users", (req, res, next) => {
     const hands = {
-        ROCK: 0,
-        SCISSORS: 1,
-        PAPER: 2,
         묵: 0,
         찌: 1,
-        빠: 2
+        빠: 2,
+        ROCK: 0,
+        SCISSORS: 1,
+        PAPER: 2
     };
 
     let users = req.params['users'].toUpperCase();
-    let servers = Object.keys(hands)[Math.floor(Math.random() * 10) % 3];
+    let servers = Object.keys(hands)[Math.floor(Math.random() * 8) % 3];
 
     switch (hands[users] - hands[servers]) {
         case 2:
@@ -37,6 +37,7 @@ router.get("/:users", (req, res, next) => {
     }
 
 }, (req, res) => {
+    res.statusCode = 400;
     res.send({
         status: "오류",
         message: "잘못된 승부수입니다."

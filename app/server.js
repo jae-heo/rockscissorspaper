@@ -11,6 +11,7 @@ app.listen(port, () => {
 app.use('/game', game);
 
 app.all(`/*`, (req, res) => {
+    res.statusCode = 400;
     res.send({
         status: "오류",
         message: "잘못된 요청입니다."
