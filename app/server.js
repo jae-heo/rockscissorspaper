@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
 const port = 8080;
-const game = require(`../routes/game`);
 
 app.set('port', 8080);
 app.listen(port, () => {
     console.log(`서버 on~`);
 });
 
-app.use('/game', game);
+app.use('/game', require(`../routes/game`));
 
 app.all(`/*`, (req, res) => {
     res.statusCode = 400;
