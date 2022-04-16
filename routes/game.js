@@ -1,6 +1,24 @@
 const express = require('express');
 const router = express.Router();
 
+const message = {
+    win : "좀 치시는군요?",
+    draw : "한판 더~",
+    lose : "키킥 Ez~~~",
+    error : "이상한거 내지 마세요 ㅡㅡ"
+}
+
+function getGameResult(res) {
+    try {
+        return rockScissorsPaper();
+    } catch (e) {
+        res.status(400).json({
+            status: "오류",
+            message: e.message
+        });
+    }
+}
+
 router.get("/:users", (req, res, next) => {
     const hands = {
         묵: 0,
@@ -14,43 +32,30 @@ router.get("/:users", (req, res, next) => {
     let users = req.params['users'].toUpperCase();
     let servers = Object.keys(hands)[Math.floor(Math.random() * 8) % 3];
 
-    switch (hands[users] - hands[servers]) {
-        case 2:
-        case -1:
-            res.send(
-                makeBody("승리", users, servers, "좀 치시는군요!")
-            );
-            break;
-        case 0:
-            res.send(
-                makeBody("무승부", users, servers, "한판더~")
-            )
-            break;
-        case -2:
-        case 1 :
-            res.send(
-                makeBody("패배", users, servers, "키킥 EAzy~")
-            )
-            break;
-        default :
-            next();
-    }
-
-}, (req, res) => {
-    res.statusCode = 400;
-    res.send({
-        status: "오류",
-        message: "잘못된 승부수입니다."
-    });
+    getGameResult(res);
 });
 
 function makeBody(status, yours, ours, message) {
     return {
-        status: status,
-        yours: yours,
-        ours: ours,
-        message: message
+        status,
+        yours,
+        ours,
+        message
     }
 }
 
+function rockScissorsPaper(users, servers) {
+    switch (users - servers) {
+        case 2:
+        case -1:
+            return message.win
+        case 0:
+            return message.draw
+        case -2:
+        case 1 :
+            return message.lose
+        default :
+            throw Error(message.error)
+    }
+}
 module.exports = router;
