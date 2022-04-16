@@ -10,8 +10,7 @@ app.listen(port, () => {
 app.use('/game', require(`../routes/game`));
 
 app.all(`/*`, (req, res) => {
-    res.statusCode = 400;
-    res.send({
+    res.status(400).json({
         status: "오류",
         message: "잘못된 요청입니다."
     });
